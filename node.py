@@ -202,19 +202,57 @@ class Puzzle:
         explored_nodes.pop()
 
 
-# Distance Class to Calculate the Manhattan Distance and Misplaced Tiles.
+class Heuristic:
+    def __init__(self,arr, goal):
+        self.arr = arr
+        self.goal = goal
 
+    def manhattan(self,distance):
+        distance = sum(abs((val - 1) % 3 - i % 3) + abs((val - 1) // 3 - i // 3)
+                       for i, val in enumerate(self.arr) if val)
+        return distance
+
+    def missplaced_tiles(self,distance):
+        for i in range(len(self.arr)):
+            if self.arr[i] != self.goal[i]:
+                distance = distance + 1
+        return distance - 1
+
+    def new_method(self,distance):
+        return "remmember your goals"
+
+
+# Distance Class to Calculate the Manhattan and Misplaced Tiles and new Distance.
 class Distance:
     def calculate(arr, goal, heuristic):
-        distance = 0
-        if heuristic == 1:
-            # misplaced tiles
-            for i in range(len(arr)):
-                if arr[i] != goal[i]:
-                    distance = distance + 1
-            return distance - 1
-        elif heuristic == 2:
-            # manhattan
-            distance = sum(abs((val - 1) % 3 - i % 3) + abs((val - 1) // 3 - i // 3)
-                           for i, val in enumerate(arr) if val)
-            return distance
+        distance = 0 
+
+        obj = Heuristic(arr,goal)
+
+        if type == "missplaced" or heuristic == 1:
+            distance = obj.missplaced_tiles(distance)
+        elif type == "manhattan" or heuristic == 2:
+            distance = obj.manhattan(distance)
+        elif type == "new" or heuristic == 3:
+            distance = obj.new_method(distance)
+        
+        # heuristic_calculator = Heuristic(heuristic, arr, goal,self.distance)
+        # distance = heuristic_calculator
+        return distance 
+        
+# class Distance:
+#     def calculate(arr, goal, heuristic):
+#         distance = 0
+#         if heuristic == 1:
+#             # misplaced tiles
+#             for i in range(len(arr)):
+#                 if arr[i] != goal[i]:
+#                     distance = distance + 1
+#             return distance - 1
+#         elif heuristic == 2:
+#             # manhattan
+#             distance = sum(abs((val - 1) % 3 - i % 3) + abs((val - 1) // 3 - i // 3)
+#                            for i, val in enumerate(arr) if val)
+            
+#             return distance
+   

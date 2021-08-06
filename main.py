@@ -4,13 +4,13 @@ from node import Distance
 from node import Node
 from node import Puzzle
 
-heuristic = input("Choose a Heuristic: \n 1. Misplaced Tiles \n 2. Manhattan Distance \n Enter : ")
+heuristic = input("Choose a Heuristic: \n 1. Misplaced Tiles \n 2. Manhattan Distance \n 3. new method \n Enter : ")
 heuristic = int(heuristic)
-
+# heuristic=1
 initial_state = [1, 3, 4, 2, 0, 5]
 final_state = [1, 2, 3, 4, 5, 0]
 
-initial_state = Node(initial_state)
+initial_state = Node(initial_state) 
 final_state = Node(final_state)
 explored_nodes = []
 fringe = [initial_state]
