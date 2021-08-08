@@ -1,12 +1,17 @@
 import numpy as np
-
+import os
 from node import Distance
 from node import Node
 from node import Puzzle
 
+os.system('cls')
+
 heuristic = input("Choose a Heuristic: \n 1. Misplaced Tiles \n 2. Manhattan Distance \n 3. new method \n Enter : ")
 heuristic = int(heuristic)
-# heuristic=1
+"""
+1 3 4
+2 0 5
+"""
 initial_state = [1, 3, 4, 2, 0, 5]
 final_state = [1, 2, 3, 4, 5, 0]
 
