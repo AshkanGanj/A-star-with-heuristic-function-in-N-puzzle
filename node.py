@@ -223,7 +223,12 @@ class Heuristic:
         if missplaced_dict:
             return tiles_dict
         return distance - 1
-
+    def find_path(self,tile,goal):
+        path = []
+        for i in self.arr:
+            if tile.index == goal:
+                path.append()
+        
     def new_method(self, distance):
         distance = self.missplaced_tiles(distance)
         missplaced_tiles_dict = self.missplaced_tiles(distance, missplaced_dict=True)
