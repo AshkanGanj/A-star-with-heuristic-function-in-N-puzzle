@@ -2,7 +2,7 @@ import numpy as np
 import os
 from node import Distance
 from node import Node
-from node import Puzzle
+from puzzle import Puzzle
 
 os.system('cls')
 
