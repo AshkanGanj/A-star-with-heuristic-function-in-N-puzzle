@@ -229,11 +229,13 @@ class Heuristic:
     def listToMatrix(self, arr: list, size: int):
         return [arr[x:x+size] for x in range(0, len(arr), size)]
 
+    # find each missplaced tiles in matrix
     def findTile(self, element, matrix):
         for i in range(len(matrix)):
             for j in range(len(matrix[i])):
                 if matrix[i][j] == element:
                     return (i, j)
+
     # find path for given tile
     def findPaths(self, start, end, matrix):
         x, y = start[0], start[1]
@@ -241,6 +243,7 @@ class Heuristic:
         pathfinder.findPath(x, y)
         paths = pathfinder.paths
         return paths
+
     # get paths for all missplaced tiles
     def getPaths(self, distance):
         paths = {}
@@ -258,7 +261,7 @@ class Heuristic:
 
     def new_method(self, distance):
         paths = self.getPaths(distance)
-        print("")
+        print(paths)
         return distance
 
 # Distance Class to Calculate the Manhattan and Misplaced Tiles and new Distance.

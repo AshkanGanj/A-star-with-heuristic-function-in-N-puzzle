@@ -1,5 +1,3 @@
-import os
-
 class PathFinder:
     def __init__(self, start, end, matrix):
         self.start = start
@@ -15,11 +13,7 @@ class PathFinder:
         if self.matrix[i][j] == self.matrix[self.end[0]][self.end[1]]:
             self.paths.append(self.path + [self.matrix[i][j]])
             return
-        # # if the last cell is reached, print the route
-        # if i == M - 1 and j == N - 1:
-        #     print(path + [mat[i][j]])
-        #     return
-
+            
         # include the current cell in the path
         self.path.append(self.matrix[i][j])
 
@@ -52,12 +46,29 @@ class PathFinder:
             # move down
             if 0 <= i - 1 < M and 0 <= j < N:
                 self.findPath(i - 1, j)
+        elif self.start[0] == self.end[0] and self.start[1] < self.end[1]:
+            # move right
+            if 0 <= i< M and 0 <= j+1 < N:
+                self.findPath(i, j+1)
+        elif self.start[0] == self.end[0] and self.start[1] > self.end[1]:
+            # move left
+            if 0 <= i < M and 0 <= j - 1 < N:
+                self.findPath(i, j - 1)
+        elif self.start[0] > self.end[0] and self.start[1] == self.end[1]:
+            # move up
+            if 0 <= i-1< M and 0 <= j < N:
+                self.findPath(i-1, j)
+        elif self.start[0] < self.end[0] and self.start[1] == self.end[1]:
+            # move down
+            if 0 <= i+1< M and 0 <= j < N:
+                self.findPath(i+1, j)
 
         # backtrack: remove the current cell from the path
         self.path.pop()
 
 
 # if __name__ == '__main__':
+#     import os
 #     os.system('cls')
 
 #     mat = [
@@ -67,9 +78,10 @@ class PathFinder:
 #     ]
 
 #     start = [0, 1]
-#     end = [2, 2]
+#     end = [2, 1]
 #     x = start[0]
 #     y = start[1]
 
 #     obj = PathFinder(start, end, mat)
 #     obj.findPath(x, y)
+#     print(obj.paths)
