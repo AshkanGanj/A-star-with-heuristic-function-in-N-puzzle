@@ -11,11 +11,12 @@ class PathFinder:
         (M, N) = (len(self.matrix), len(self.matrix[0]))
 
         if self.matrix[i][j] == self.matrix[self.end[0]][self.end[1]]:
-            self.paths.append(self.path + [self.matrix[i][j]])
+            self.paths.append(self.path + [{'value':self.matrix[i][j],'coordinate':(i,j)}])
             return
             
         # include the current cell in the path
-        self.path.append(self.matrix[i][j])
+        cell = {'value':self.matrix[i][j],'coordinate':(i,j)}
+        self.path.append(cell)
 
         if self.start[0] > self.end[0] and self.start[1] > self.end[1]:
             # move left
