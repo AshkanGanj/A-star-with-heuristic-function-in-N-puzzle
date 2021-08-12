@@ -6,8 +6,8 @@ from puzzle import Puzzle
 
 os.system('cls')
 
-heuristic = input("Choose a Heuristic: \n 1. Misplaced Tiles \n 2. Manhattan Distance \n 3. new method \n Enter : ")
-heuristic = int(heuristic)
+# heuristic = input("Choose a Heuristic: \n 1. Misplaced Tiles \n 2. Manhattan Distance \n 3. new method \n Enter : ")
+heuristic = 3
 
 """
 1 3 4
