@@ -1,5 +1,6 @@
 from path import PathFinder
 from copy import deepcopy
+from operator import sub
 
 class Heuristic:
     def __init__(self, arr, goal):
@@ -55,19 +56,24 @@ class Heuristic:
         return paths
     # return index of blank space
 
-    def findblank(self):
+    def findTargetTile(self,tile):
         for i, x in enumerate(self.matrix):
-            if 0 in x:
-                return (i, x.index(0))
+            if tile in x:
+                return (i, x.index(tile))
 
     def swapTile(self, matrix, first, second):
         matrix[first[0]][first[1]], matrix[second[0]][second[1]
                                                       ] = matrix[second[0]][second[1]], matrix[first[0]][first[1]]
+    def movementValidation(self,blank,target):
+        result = (list(map(sub,blank,target)))
+        if (0<= result[0] <=1) and (0 <= result[1] <=1) and not ((result[0] == result[1]) ==1):
+            return True
+        return False
 
-    def blankTileSteps(self,matrix, target):
+    def blankTileSteps(self,matrix, target,tile):
         # store different paths steps
         step_counter = 0
-        blank_index = self.findblank()
+        blank_index = self.findTargetTile(0)
         paths = self.findPaths(blank_index, target, matrix)
         # sort paths by len
         paths.sort(key=lambda x: len(x))
@@ -80,7 +86,15 @@ class Heuristic:
             index2 = paths[i][j+1]['coordinate']
             # move tile with blank space
             self.swapTile(matrix, index1, index2)
+            # if we reached last move
+            if j == len(paths[i]) - 2:
+                blank_index = self.findTargetTile(0)
+                target = self.findTargetTile(int(tile))
+                if self.movementValidation(blank_index,target):
+                    self.swapTile(matrix,blank_index,target)
+                    step_counter += 1
             step_counter += 1
+
             
         return step_counter
 
@@ -98,15 +112,12 @@ class Heuristic:
             self.matrix = self.listToMatrix(self.arr, 3)
             for i,path in enumerate(paths[tile]):
                 for index in range(len(path)):
-                    # list of zeros for store steps of paths
-                    temp = []
                     # first cell
                     if index == 0:
                         pass
                     else:
                         # +1 is for last move
-                        step_counter += self.blankTileSteps(self.matrix, paths[tile][0][index]['coordinate']) + 1
-                        temp.append(step_counter)
+                        step_counter += self.blankTileSteps(self.matrix, paths[tile][0][index]['coordinate'],tile)
                 distances[str(tile)] = step_counter        
         return distance
 
