@@ -1,13 +1,12 @@
-from numpy import exp, matrix
 from path import PathFinder
-
+from copy import deepcopy
 
 class Heuristic:
     def __init__(self, arr, goal):
         self.arr = arr
         self.goal = goal
         self.matrix = []
-        self.matrx_copy = []
+        self.orginal_matrix = []
 
     def manhattan(self, distance):
         distance = sum(abs((val - 1) % 3 - i % 3) + abs((val - 1) // 3 - i // 3)
@@ -45,12 +44,8 @@ class Heuristic:
         return paths
 
     # get paths for all missplaced tiles
-    def getPaths(self, distance):
+    def getPaths(self, distance , matrix_start, matrix_goal):
         paths = {}
-        matrix_start = self.listToMatrix(self.arr, 3)
-        self.matrix = matrix_start
-        matrix_goal = self.listToMatrix(self.goal, 3)
-
         missplaced_tiles_dict = self.missplaced_tiles(
             distance, missplaced_dict=True)
         for tile in missplaced_tiles_dict['list']:
@@ -69,10 +64,11 @@ class Heuristic:
     def swapTile(self, matrix, first, second, counter):
         matrix[first[0]][first[1]], matrix[second[0]][second[1]
                                                       ] = matrix[second[0]][second[1]], matrix[first[0]][first[1]]
+
         counter += 1
         return counter
 
-    def blankTileSteps(self,target, matrix_copy):
+    def blankTileSteps(self, target):
         # store different paths steps
         step_counter = 0
         blank_index = self.findblank()
@@ -87,99 +83,41 @@ class Heuristic:
             # end index
             index2 = paths[i][j+1]['coordinate']
             # move tile with blank space
-            step_counter = self.swapTile(
-                matrix_copy, index1, index2, step_counter)
-        # for i in range(len(paths)):
-
-        #     if not flage:
-
-        #         flage = True
-
-        #     for j in range(len(paths[i]) - 1):
-        #         # start index
-        #         index1 = paths[i][j]['coordinate']
-        #         # end index
-        #         index2 = paths[i][j+1]['coordinate']
-        #         # move tile with blank space
-        #         step_counter += self.swapTile(
-        #             matrix_copy, index1, index2, step_counter)
+            step_counter = self.swapTile(self.matrix, index1, index2, step_counter)
+            
 
         return step_counter
 
     def new_method(self, distance):
+        
         step_counter = 0
-        self.matrx_copy = self.matrix
-        paths = self.getPaths(distance)
+        matrix_start = self.listToMatrix(self.arr, 3)
+        matrix_goal = self.listToMatrix(self.goal, 3)
+        
+        self.matrix = deepcopy(matrix_start)
+
+        paths = self.getPaths(distance,self.matrix,matrix_goal)
         distances = {}
         for tile in paths:
-            array_copy = self.arr
-            steps = []
             distances[str(tile)] = 0
-            # sort based on len of path
-            paths[tile].sort(key=lambda x: len(x))
-            for index, item in enumerate(paths[tile][0]):
-                # first cell
-                if index == 0:
-                    pass
-                else:
-                    # +1 is for last move
-                    step_counter = self.blankTileSteps(
-                        paths[tile][0][index]['coordinate'],self.matrx_copy) + 1
-                    distances[str(tile)] = step_counter
-                    step_counter = 0
+            step_counter = 0
 
-            # for path in paths[tile]:
-            #     for index, item in enumerate(path):
-            #         # first cell
-            #         if index == 0:
-            #             pass
-            #         else:
-            #             # +1 is for last move
-            #             step_counter = self.blankTileSteps(
-            #                 path[index]['coordinate']) + 1
-            #             distances[str(tile)] = step_counter
-            #             step_counter = 0
-
-                        # temp = self.findPaths(
-                        #     blank_space_coordinate, path[index]['coordinate'], self.matrix)
-                        # # find shortest path
-                        # min = float('inf')
-                        # for i in temp:
-                        #     if len(i) < min:
-                        #         min = len(i) - 1
-                        # distances[tile] += min
-                        # if len(paths[tile]) > 1:
-                        #     steps.append(distances[str(tile)])
-                        # blank_space_coordinate = path[0]['coordinate']
-
-                # if len(paths[tile]) > 1:
-                #     distances[tile] = min(steps)
-                #     steps = []
-                    # # last cell can't have +1 so blank should come to last cell
-                    # try:
-                    #     temp = self.findPaths(blank_space_coordinate,path[index+1]['coordinate'],self.matrix)
-                    #     # find shortest path
-                    #     min = float('inf')
-                    #     for i in temp:
-                    #         if len(i) < min:
-                    #             min = len(i)
-
-                    #     distances[str(tile)] = step_counter + min + 1
-                    # except:
-                    #     pass
-                    #     # temp = self.findPaths(blank_space_coordinate,path[index]['coordinate'],self.matrix)
-                    #     # # find shortest path
-                    #     # for i in temp:
-                    #     #     if len(i) < min:
-                    #     #         min = len(i)
-
-                    # # step_counter += min
-
+            for i,path in enumerate(paths[tile]):
+                for index in range(len(path)):
+                    # list of zeros for store steps of paths
+                    temp = []
+                    # first cell
+                    if index == 0:
+                        pass
+                    else:
+                        # +1 is for last move
+                        step_counter += self.blankTileSteps(
+                            paths[tile][0][index]['coordinate']) + 1
+                        temp.append(step_counter)
+                distances[str(tile)] = step_counter        
         return distance
 
 # Distance Class to Calculate the Manhattan and Misplaced Tiles and new Distance.
-
-
 class Distance:
     def calculate(arr, goal, heuristic):
         distance = 0
