@@ -4,7 +4,7 @@ from node import Distance
 from node import Node
 from puzzle import Puzzle
 
-os.system('cls')
+os.system('clear')
 
 # heuristic = input("Choose a Heuristic: \n 1. Misplaced Tiles \n 2. Manhattan Distance \n 3. new method \n Enter : ")
 heuristic = 3
