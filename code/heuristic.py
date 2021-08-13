@@ -6,7 +6,6 @@ class Heuristic:
         self.arr = arr
         self.goal = goal
         self.matrix = []
-        self.orginal_matrix = []
 
     def manhattan(self, distance):
         distance = sum(abs((val - 1) % 3 - i % 3) + abs((val - 1) // 3 - i // 3)
@@ -61,18 +60,15 @@ class Heuristic:
             if 0 in x:
                 return (i, x.index(0))
 
-    def swapTile(self, matrix, first, second, counter):
+    def swapTile(self, matrix, first, second):
         matrix[first[0]][first[1]], matrix[second[0]][second[1]
                                                       ] = matrix[second[0]][second[1]], matrix[first[0]][first[1]]
 
-        counter += 1
-        return counter
-
-    def blankTileSteps(self, target):
+    def blankTileSteps(self,matrix, target):
         # store different paths steps
         step_counter = 0
         blank_index = self.findblank()
-        paths = self.findPaths(blank_index, target, self.matrix)
+        paths = self.findPaths(blank_index, target, matrix)
         # sort paths by len
         paths.sort(key=lambda x: len(x))
         #  select shortest path
@@ -83,25 +79,23 @@ class Heuristic:
             # end index
             index2 = paths[i][j+1]['coordinate']
             # move tile with blank space
-            step_counter = self.swapTile(self.matrix, index1, index2, step_counter)
+            self.swapTile(matrix, index1, index2)
+            step_counter += 1
             
-
         return step_counter
 
-    def new_method(self, distance):
-        
+    def new_method(self, distance):     
         step_counter = 0
         matrix_start = self.listToMatrix(self.arr, 3)
         matrix_goal = self.listToMatrix(self.goal, 3)
-        
-        self.matrix = deepcopy(matrix_start)
-
+        self.matrix = matrix_start.copy()
         paths = self.getPaths(distance,self.matrix,matrix_goal)
         distances = {}
+
         for tile in paths:
             distances[str(tile)] = 0
             step_counter = 0
-
+            self.matrix = self.listToMatrix(self.arr, 3)
             for i,path in enumerate(paths[tile]):
                 for index in range(len(path)):
                     # list of zeros for store steps of paths
@@ -111,8 +105,7 @@ class Heuristic:
                         pass
                     else:
                         # +1 is for last move
-                        step_counter += self.blankTileSteps(
-                            paths[tile][0][index]['coordinate']) + 1
+                        step_counter += self.blankTileSteps(self.matrix, paths[tile][0][index]['coordinate']) + 1
                         temp.append(step_counter)
                 distances[str(tile)] = step_counter        
         return distance
