@@ -26,6 +26,7 @@ class PathFinder:
                     tile_lock_coordinate =  (i, x.index(int(tile_lock)))
 
             paths = [p for p in nx.all_simple_paths(G, source=coor1,target=coor2)]
+            i = 0
             while i <= len(paths) -1:
                 if tile_lock_coordinate in paths[i]:
                     paths.remove(paths[i])
