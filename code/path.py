@@ -5,8 +5,6 @@ class PathFinder:
         self.start = start
         self.end = end
         self.matrix = matrix
-        # self.path = []
-        # self.paths = []
         
     def findPath(self,path_type,tile_lock):     
         G = nx.grid_2d_graph(2,3)
@@ -28,7 +26,7 @@ class PathFinder:
             paths = [p for p in nx.all_simple_paths(G, source=coor1,target=coor2)]
             i = 0
             while i <= len(paths) -1:
-                if tile_lock_coordinate in paths[i]:
+                if tile_lock_coordinate in paths[i] and not(tile_lock == 0):
                     paths.remove(paths[i])
                     i = -1
                 i +=1
