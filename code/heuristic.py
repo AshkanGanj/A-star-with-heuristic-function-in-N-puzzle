@@ -7,6 +7,7 @@ class Heuristic:
         self.arr = arr
         self.goal = goal
         self.matrix = []
+        self.blank_original = (1,2)
 
     def manhattan(self, distance):
         distance = sum(abs((val - 1) % 3 - i % 3) + abs((val - 1) // 3 - i // 3)
@@ -36,11 +37,11 @@ class Heuristic:
                     return (i, j)
 
     # find path for given tile
-    def findPaths(self, start, end, matrix):
+    def findPaths(self, start, end, matrix,tile_lock,search_type):
         x, y = start[0], start[1]
         pathfinder = PathFinder(start, end, matrix)
-        pathfinder.findPath(x, y)
-        paths = pathfinder.paths
+        
+        paths = pathfinder.findPath(search_type,tile_lock)
         return paths
 
     # get paths for all missplaced tiles
@@ -51,8 +52,7 @@ class Heuristic:
         for tile in missplaced_tiles_dict['list']:
             index_start = self.findTile(tile, matrix_start)
             index_end = self.findTile(tile, matrix_goal)
-            paths[str(tile)] = self.findPaths(
-                index_start, index_end, matrix_start)
+            paths[str(tile)] = self.findPaths(index_start, index_end, matrix_start,tile,"short")
         return paths
     # return index of blank space
 
@@ -64,41 +64,54 @@ class Heuristic:
     def swapTile(self, matrix, first, second):
         matrix[first[0]][first[1]], matrix[second[0]][second[1]
                                                       ] = matrix[second[0]][second[1]], matrix[first[0]][first[1]]
-    def movementValidation(self,blank,target):
-        result = (list(map(sub,blank,target)))
-        if (0<= result[0] <=1) and (0 <= result[1] <=1) and not ((result[0] == result[1]) ==1):
-            return True
-        return False
+
+    # count steps for returing blank to it's own place
+    def setBlankTile(self,tile,blank_index):
+        if blank_index == (1,2):
+            return 0
+        paths = self.findPaths(blank_index, (1,2), self.matrix,int(tile),"all")
+        paths.sort(key=len)
+        step_counter = 0
+
+        for i in range(1,len(paths[0])):
+            target = paths[0][i]
+            self.swapTile(self.matrix,blank_index,target)
+            step_counter += 1
+        return step_counter
 
     def blankTileSteps(self,matrix, target,tile):
         # store different paths steps
         step_counter = 0
         blank_index = self.findTargetTile(0)
-        paths = self.findPaths(blank_index, target, matrix)
-        # sort paths by len
-        paths.sort(key=lambda x: len(x))
-        #  select shortest path
+        # if target is blank
+        if blank_index == target:
+            blank_index = self.findTargetTile(0)
+            target = self.findTargetTile(int(tile))
+            self.swapTile(matrix,blank_index,target)
+            step_counter += 1
+            return step_counter
+
+        paths = self.findPaths(blank_index, target, matrix,int(tile),"all")
+        paths.sort(key=len)
         i = 0
         for j in range(len(paths[i]) - 1):
             # start index
-            index1 = paths[i][j]['coordinate']
+            index1 = paths[i][j]
             # end index
-            index2 = paths[i][j+1]['coordinate']
+            index2 = paths[i][j+1]
             # move tile with blank space
             self.swapTile(matrix, index1, index2)
+            step_counter += 1
             # if we reached last move
             if j == len(paths[i]) - 2:
                 blank_index = self.findTargetTile(0)
                 target = self.findTargetTile(int(tile))
-                if self.movementValidation(blank_index,target):
-                    self.swapTile(matrix,blank_index,target)
-                    step_counter += 1
-            step_counter += 1
-
-            
+                self.swapTile(matrix,blank_index,target)
+                step_counter += 1
         return step_counter
 
-    def new_method(self, distance):     
+    def new_method(self, distance):
+        
         step_counter = 0
         matrix_start = self.listToMatrix(self.arr, 3)
         matrix_goal = self.listToMatrix(self.goal, 3)
@@ -110,16 +123,26 @@ class Heuristic:
             distances[str(tile)] = 0
             step_counter = 0
             self.matrix = self.listToMatrix(self.arr, 3)
+
+            # if tile == '0'
+            if tile == '0':
+                blank_index = self.findTargetTile(0)
+                distances[str(tile)] = self.setBlankTile(tile,blank_index)
+                continue
+            
+            #store steps for different paths
+            steps = []
             for i,path in enumerate(paths[tile]):
-                for index in range(len(path)):
-                    # first cell
-                    if index == 0:
-                        pass
-                    else:
-                        # +1 is for last move
-                        step_counter += self.blankTileSteps(self.matrix, paths[tile][0][index]['coordinate'],tile)
-                distances[str(tile)] = step_counter        
-        return distance
+                self.matrix = self.listToMatrix(self.arr, 3)
+                for index in range(1,len(path)):
+                    step_counter += self.blankTileSteps(self.matrix, path[index],tile)
+                steps.append(step_counter)
+
+            # return 0 to his original place
+            target = self.findTargetTile(0)
+            step_counter += self.setBlankTile(tile,target)
+            distances[str(tile)] = min(steps)       
+        return distances
 
 # Distance Class to Calculate the Manhattan and Misplaced Tiles and new Distance.
 class Distance:
@@ -132,7 +155,7 @@ class Distance:
             distance = obj.manhattan(distance)
         elif type == "new" or heuristic == 3:
             distance = obj.new_method(distance)
-
+            print(distance)
         # heuristic_calculator = Heuristic(heuristic, arr, goal,self.distance)
         # distance = heuristic_calculator
         return distance
