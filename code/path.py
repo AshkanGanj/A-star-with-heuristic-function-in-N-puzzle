@@ -21,7 +21,17 @@ class PathFinder:
         coor2 = self.end
 
         if path_type == "all":
-            return ([p for p in nx.all_simple_paths(G, source=coor1,target=coor2)])
+            for i, x in enumerate(self.matrix):
+                if tile_lock in x:
+                    tile_lock_coordinate =  (i, x.index(int(tile_lock)))
+
+            paths = [p for p in nx.all_simple_paths(G, source=coor1,target=coor2)]
+            while i <= len(paths) -1:
+                if tile_lock_coordinate in paths[i]:
+                    paths.remove(paths[i])
+                    i = -1
+                i +=1
+            return paths
 
         elif path_type == "short":
             return ([p for p in nx.all_shortest_paths(G, source=coor1,target=coor2)])
