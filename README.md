@@ -25,3 +25,8 @@ In this project, I have Two main goal:
 I first move the empty space in all the possible directions in the start state and calculate the f-score for each state. This is called expanding the current state.
 After expanding the current state, it is pushed into the closed list and the newly generated states are pushed into the open list. A state with the least f-score is selected and expanded again. This process continues until the goal state occurs as the current state. Basically, here we are providing the algorithm a measure to choose its actions. The algorithm chooses the best possible action and proceeds in that path.
 This solves the issue of generating redundant child states, as the algorithm will expand the node with the least f-score.
+
+# Implementation
+
+I have used six classes in my code: Node, Puzzle, Movements, pathFinder, Distance, and Heuristic.
+Node class defines the structure of the state(configuration) and also provides functions to move the empty space and generate child states from the current state. Puzzle class accepts the initial and goal states of the N-Puzzle problem and provides functions to calculate the f-score of any given node(state).
