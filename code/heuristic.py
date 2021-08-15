@@ -1,7 +1,6 @@
 from path import PathFinder
-from copy import deepcopy
-from operator import sub
 
+import numpy
 class Heuristic:
     def __init__(self, arr, goal):
         self.arr = arr
@@ -57,9 +56,9 @@ class Heuristic:
     # return index of blank space
 
     def findTargetTile(self,tile):
-        for i, x in enumerate(self.matrix):
-            if tile in x:
-                return (i, x.index(tile))
+            for i, x in enumerate(self.matrix):
+                if tile in x:
+                    return (i, x.index(tile))
 
     def swapTile(self, matrix, first, second):
         matrix[first[0]][first[1]], matrix[second[0]][second[1]
@@ -136,11 +135,11 @@ class Heuristic:
                 self.matrix = self.listToMatrix(self.arr, 3)
                 for index in range(1,len(path)):
                     step_counter += self.blankTileSteps(self.matrix, path[index],tile)
+                # return 0 to his original place
+                target = self.findTargetTile(0)
+                step_counter += self.setBlankTile(tile,target)
                 steps.append(step_counter)
 
-            # return 0 to his original place
-            target = self.findTargetTile(0)
-            step_counter += self.setBlankTile(tile,target)
             distances[str(tile)] = min(steps)       
         return distances
 
@@ -148,14 +147,20 @@ class Heuristic:
 class Distance:
     def calculate(arr, goal, heuristic):
         distance = 0
+        if type(arr) != list:
+            arr = arr.tolist()
+            goal = goal.tolist()
+            if(arr == goal):
+                return 0
+
         obj = Heuristic(arr, goal)
         if type == "missplaced" or heuristic == 1:
             distance = obj.missplaced_tiles(distance)
         elif type == "manhattan" or heuristic == 2:
             distance = obj.manhattan(distance)
         elif type == "new" or heuristic == 3:
-            distance = obj.new_method(distance)
-            print(distance)
+            distances = obj.new_method(distance)
+            return max(distances.values())
         # heuristic_calculator = Heuristic(heuristic, arr, goal,self.distance)
         # distance = heuristic_calculator
         return distance

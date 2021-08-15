@@ -5,9 +5,13 @@ from node import Node
 from puzzle import Puzzle
 
 os.system('clear')
+import timeit
 
-# heuristic = input("Choose a Heuristic: \n 1. Misplaced Tiles \n 2. Manhattan Distance \n 3. new method \n Enter : ")
-heuristic = 3
+start = timeit.default_timer()
+
+
+heuristic = int(input("Choose a Heuristic: \n 1. Misplaced Tiles \n 2. Manhattan Distance \n 3. new method \n Enter : "))
+
 
 """
 1 3 4
@@ -46,3 +50,8 @@ while not not fringe:
     elif not np.array_equal(current_node, goal_node):
         zero = np.where(np.asarray(current_node.get_current_state()) == 0)[0][0]
         count = Node.expand_node(fringe, explored_nodes, current_node, goal_node, zero, g, count, heuristic)
+
+
+stop = timeit.default_timer()
+
+print('Time: ', stop - start)  
