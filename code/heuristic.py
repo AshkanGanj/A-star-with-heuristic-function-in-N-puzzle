@@ -64,7 +64,6 @@ class Heuristic:
         matrix[first[0]][first[1]], matrix[second[0]][second[1]
                                                       ] = matrix[second[0]][second[1]], matrix[first[0]][first[1]]
 
-    # count steps for returing blank to it's own place
     def setBlankTile(self,tile,blank_index):
         if blank_index == (1,2):
             return 0
@@ -73,6 +72,7 @@ class Heuristic:
         step_counter = 0
 
         for i in range(1,len(paths[0])):
+            blank_index = self.findTargetTile(0)
             target = paths[0][i]
             self.swapTile(self.matrix,blank_index,target)
             step_counter += 1
@@ -112,6 +112,7 @@ class Heuristic:
     def new_method(self, distance):
         
         step_counter = 0
+
         matrix_start = self.listToMatrix(self.arr, 3)
         matrix_goal = self.listToMatrix(self.goal, 3)
         self.matrix = matrix_start.copy()
@@ -139,6 +140,7 @@ class Heuristic:
                 target = self.findTargetTile(0)
                 step_counter += self.setBlankTile(tile,target)
                 steps.append(step_counter)
+                step_counter = 0
 
             distances[str(tile)] = min(steps)       
         return distances
