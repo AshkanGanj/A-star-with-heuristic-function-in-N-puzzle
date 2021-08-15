@@ -30,3 +30,7 @@ This solves the issue of generating redundant child states, as the algorithm wil
 
 I have used six classes in my code: Node, Puzzle, Movements, pathFinder, Distance, and Heuristic.
 Node class defines the structure of the state(configuration) and provides functions to expand states and generate child states from the current state. Movement class allows us to do movements in our puzzles. Puzzle class checks if we reach our goal state or not and, Also, print our states. PathFinder class plays an essential role. It finds different paths in our puzzle with a graph search algorithm. Distance and Heuristic are responsible for return distance for each state.
+
+# New Heuristic
+
+In the new method, At first, we need to find all misplaced tiles and then calculate the number of steps that are needed for each tile to reach its actual place, and at the end, the number of steps for blank space to reach its place is added to the sum of distance. These steps should be done for all out of placed tiles, and at the end, the algorithm chooses the maximum number as h_score.
