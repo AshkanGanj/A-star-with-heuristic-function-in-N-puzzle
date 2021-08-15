@@ -1,4 +1,3 @@
-# N-puzzle
 # Introduction
 In this project i have to main goal:
 > *  find a new function to improve algorithm
