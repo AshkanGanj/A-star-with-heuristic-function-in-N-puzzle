@@ -29,4 +29,4 @@ This solves the issue of generating redundant child states, as the algorithm wil
 # Implementation
 
 I have used six classes in my code: Node, Puzzle, Movements, pathFinder, Distance, and Heuristic.
-Node class defines the structure of the state(configuration) and also provides functions to move the empty space and generate child states from the current state. Puzzle class accepts the initial and goal states of the N-Puzzle problem and provides functions to calculate the f-score of any given node(state).
+Node class defines the structure of the state(configuration) and provides functions to expand states and generate child states from the current state. Movement class allows us to do movements in our puzzles. Puzzle class checks if we reach our goal state or not and, Also, print our states. PathFinder class plays an essential role. It finds different paths in our puzzle with a graph search algorithm. Distance and Heuristic are responsible for return distance for each state.
