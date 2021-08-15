@@ -34,3 +34,10 @@ Node class defines the structure of the state(configuration) and provides functi
 # New Heuristic
 
 In the new method, At first, we need to find all misplaced tiles and then calculate the number of steps that are needed for each tile to reach its actual place, and at the end, the number of steps for blank space to reach its place is added to the sum of distance. These steps should be done for all out of placed tiles, and at the end, the algorithm chooses the maximum number as h_score.
+
+# Result comparing
+A figure to show the difference and improvements between the new method and other heuristics.
+<p>
+  <img src="https://user-images.githubusercontent.com/55941654/129486653-b07b1627-94f0-4ea3-bc70-9a977f488e77.png">
+</p>
+
