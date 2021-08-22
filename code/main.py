@@ -4,6 +4,12 @@ from node import Distance
 from node import Node
 from puzzle import Puzzle
 
+def write_data(data):
+    with open('data1.txt','w') as f:
+        for item in data:
+            f.write(str(item))
+            f.write('\n')
+
 os.system('clear')
 import timeit
 
@@ -24,6 +30,8 @@ heuristic = int(input("Choose a Heuristic: \n 1. Misplaced Tiles \n 2. Manhattan
 initial_state = [1, 3, 4, 2, 0, 5]
 final_state = [1, 2, 3, 4, 5, 0]
 
+All_states = []
+
 initial_state = Node(initial_state) 
 final_state = Node(final_state)
 explored_nodes = []
@@ -38,6 +46,10 @@ while not not fringe:
     # select minimum fn for expand
     minimum_fn_index = Puzzle.least_fn(fringe)
     current_node = fringe.pop(minimum_fn_index)
+    if type(current_node.child) != list:
+        All_states.append({'list':current_node.child.tolist(),'distance':current_node.hn})
+    else:
+        All_states.append({'list':current_node.child,'distance':current_node.hn})
     g = current_node.get_gn() + 1
     goal_node = np.asarray(final_state.get_current_state())
 
@@ -53,5 +65,18 @@ while not not fringe:
 
 
 stop = timeit.default_timer()
+print("all : ", len(All_states))
+print('Time: ', stop - start)
 
-print('Time: ', stop - start)  
+frequency = []
+for item in All_states:
+    counter = 0
+    for j in All_states:
+        if item['distance'] == j['distance']:
+            counter +=1
+    frequency.append({'distance':item['distance'],'count':counter-1})
+
+# remove duplicates
+res = []
+[res.append(x) for x in frequency if x not in res]
+write_data(res)

@@ -1,0 +1,6 @@
+{'distance': 4, 'count': 51}
+{'distance': 2, 'count': 13}
+{'distance': 3, 'count': 34}
+{'distance': 5, 'count': 40}
+{'distance': 1, 'count': 1}
+{'distance': 0, 'count': 0}

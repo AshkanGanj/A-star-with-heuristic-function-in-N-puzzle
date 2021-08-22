@@ -50,10 +50,6 @@ class Node:
             move.move("right")
             # node_copy[blank_space - 1], node_copy[blank_space] = current_node_array[blank_space], node_copy[blank_space - 1]
             distance = Distance.calculate(node_copy, goal_node, heuristic)
-            print('----------------------------')
-            print(node_copy.tolist())
-            print(distance)
-            print('----------------------------')
             count = count + 1
 
             if not list(node_copy) in a:

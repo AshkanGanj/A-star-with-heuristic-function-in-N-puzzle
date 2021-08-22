@@ -1,6 +1,5 @@
 from path import PathFinder
 
-import numpy
 class Heuristic:
     def __init__(self, arr, goal):
         self.arr = arr
