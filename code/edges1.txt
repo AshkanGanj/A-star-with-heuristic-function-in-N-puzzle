@@ -1,0 +1,6 @@
+{'edges': 4, 'distance': 4}
+{'edges': 2, 'distance': 2}
+{'edges': 3, 'distance': 3}
+{'edges': 5, 'distance': 5}
+{'edges': 1, 'distance': 1}
+{'edges': -1, 'distance': 0}
