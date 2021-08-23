@@ -38,11 +38,11 @@ In the new method, At first, we need to find all misplaced tiles and then calcul
 # Result comparing
 ### A figure to show the difference and improvements between the new method and other heuristics.
 <p>
-  <img src="https://user-images.githubusercontent.com/55941654/129486653-b07b1627-94f0-4ea3-bc70-9a977f488e77.png">
+  <img src="https://user-images.githubusercontent.com/55941654/130363646-3e2767d0-2cc1-4d07-b816-73f236f195cd.png">
 </p>
 
 ### each distance's state frequency.
 
 <p>
-  <img src="https://user-images.githubusercontent.com/55941654/130363213-19d2e609-1d95-42e1-abdd-2a8acd5768b3.png">
+  <img src="https://user-images.githubusercontent.com/55941654/130363661-4604924c-d8bc-4d8a-ad08-36b6b3a9f9b6.png">
 </p>
