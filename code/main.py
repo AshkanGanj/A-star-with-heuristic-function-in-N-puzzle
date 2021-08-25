@@ -45,8 +45,18 @@ while not not fringe:
     current_node = fringe.pop(minimum_fn_index)
 
     if type(current_node.child) != list:
+        status = ""
+        num = utility.get_mis_tiles(current_node.child.tolist(),final_state.child)
+        # setting status of state 
+        if num < data[-1]['distance']:
+            status = "green"
+        elif num == data[-1]['distance']:
+            status = "yellow"
+        elif num > data[-1]['distance']:
+            status = "red"
+
         data.append(
-            {'edges':utility.get_mis_tiles( current_node.child.tolist(),final_state.child), 'distance': current_node.hn})
+            {'edges':num,'status':status ,'distance': current_node.hn})
         All_states.append(
             {'list': current_node.child.tolist(), 'distance': current_node.hn})
     else:
@@ -76,20 +86,20 @@ stop = timeit.default_timer()
 print("all : ", len(All_states))
 print('Time: ', stop - start)
 
-frequency = []
-for item in All_states:
-    counter = 0
-    for j in All_states:
-        if item['distance'] == j['distance']:
-            counter += 1
-    frequency.append({'distance': item['distance'], 'count': counter-1})
+# frequency = []
+# for item in All_states:
+#     counter = 0
+#     for j in All_states:
+#         if item['distance'] == j['distance']:
+#             counter += 1
+#     frequency.append({'distance': item['distance'], 'count': counter-1})
 
 # remove duplicates
 # res_states = []
 # [res_states.append(x) for x in frequency if x not in res_states]
 
-res_edges = []
-[res_edges.append(x) for x in data if x not in res_edges]
+# res_edges = []
+# [res_edges.append(x) for x in data if x not in res_edges]
 
 # utility.write_data(res_states,'data.txt')
-utility.write_data(res_edges,'edges1.txt')
+utility.write_data(data,'edges3.txt')
